@@ -9,11 +9,10 @@ async function sendEther(amount, address) {
     const tx = await signer.sendTransaction({
         to: address,
         value: ethers.utils.parseEther(amount.toString())
+        
     });
     await tx.wait();
     return tx;
 }
-
-// console.log(sendEther(0.01, "0x7A7a4EdC679bC4E29F74E32E9eEDd256cd435FBb"))
 
 module.exports = sendEther
