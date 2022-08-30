@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+
+<body>
+    <span id="address"></span>
+    <span id="balance"></span>
+    <input type="button" value="Generate Random Wallet" id="refreshBalance" onclick="generateRandomWallet()">
+    <script type="module">
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            let web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+            let account = await web3.eth.accounts.create();
+            document.getElementById("address").innerHTML = account.address + "<br>";
+            document.getElementById("balance").innerHTML = await web3.eth.getBalance(account.address) + "<br>";
+            document.getElementById("refreshBalance").onclick = async function () {
+                document.getElementById("balance").innerHTML = await web3.eth.getBalance(account.address) + "<br>";
+            }
+        }
+    </script>
+
+</body>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+
+<body>
+    <h1>Local Node Info</h1>
+    <span id="address"></span>
+    <span id="balance"></span>
+    <input type="number" id="amount">
+    <button id="donate" onclick="onClick()">Donate</button>
+    <button id="refreshBalance" onclick="refreshBalance()">Refresh Balance</button>
+    <script type="module">
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            // set the provider you want from Web3.providers
+            let web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+            // send a transaction to the network    
+            let account = await web3.eth.accounts.create();
+            // sign the new 
+
+            document.getElementById("address").innerHTML = account.address + "<br>";
+            document.getElementById("balance").innerHTML = await web3.eth.getBalance(account.address) + "<br>";
+            document.getElementById("donate").onclick = await function () {
+                let amount = document.getElementById("amount").value;
+                let tx = {
+                    from: account.address,
+                    to: "0x837F324FF70AD9AE4B71084c941c23dDF8371d60",
+                    value: web3.utils.toWei(amount, "ether"),
+                    gas: 21000,
+                };
+                // sign the transaction
+                web3.eth.accounts.signTransaction(tx, account.privateKey).then(signed => {
+                    // send the signed transaction to the network
+                    web3.eth.sendSignedTransaction(signed.rawTransaction).on('receipt', console.log);
+                });
+                // let signedTx = await web3.eth.accounts.x(tx, account.privateKey);
+                // send the signed transaction to the network   
+            }
+            document.getElementById("refreshBalance").onclick = async function () {
+                document.getElementById("balance").innerHTML = await web3.eth.getBalance(account.address) + "<br>";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

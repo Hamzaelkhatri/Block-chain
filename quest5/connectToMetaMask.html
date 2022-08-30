@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.2/dist/web3.min.js"></script>
+
+</head>
+<span id="address"></span>
+<span id="balance"></span>
+<button id="connect" onclick="connect()">connect</button>
+<button id="refreshBalance" onclick="refreshBalance()">Refresh Balance</button>
+<script type="module">
+
+    document.getElementById("connect").onclick = connect;
+    document.getElementById("refreshBalance").onclick = refreshBalance;
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum)
+    async function connect() {
+        await provider.send("eth_requestAccounts", []);
+        const signer = provider.getSigner()
+        document.getElementById("address").innerHTML = await signer.getAddress() + "<br>";
+        document.getElementById("balance").innerHTML = await signer.getBalance() + "<br>";
+    }
+
+    async function refreshBalance() {
+        const signer = provider.getSigner()
+        const balance = await signer.getBalance()
+        document.getElementById("balance").innerHTML = balance + "<br>";
+    }
+
+</script>
+
+</html>

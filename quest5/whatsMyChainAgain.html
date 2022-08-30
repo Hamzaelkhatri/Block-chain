@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+
+</head>
+
+<body>
+    <span id="chainId"></span>
+    <span id="lastBlockNumber"></span>
+    <span id="numberOfTransactions"></span>
+    <script type="module">
+        if (typeof web3 !== 'undefined') {
+            web3 = new Web3(web3.currentProvider);
+        } else {
+            let web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/83fe539734cc48318b810ba76ed881dd"));
+
+            document.getElementById("chainId").innerHTML = await web3.eth.net.getId();
+            document.getElementById("lastBlockNumber").innerHTML = await web3.eth.getBlockNumber();
+            //the number of transactions of the last block
+            document.getElementById("numberOfTransactions").innerHTML = await web3.eth.getBlockTransactionCount(await web3.eth.getBlockNumber());
+            // document.getElementById("numberOfTransactions").innerHTML = await web3.utils.toChecksumAddress(web3.eth.getTransactionCount("0x0"));
+        }
+    </script>
+</body>
