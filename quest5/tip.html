@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.2.2/dist/web3.min.js"></script>
+</head>
+
+<body>
+    <input type="text" id="address" placeholder="address">
+    <button id="connect" onclick="connect()">connect</button>
+    <button id="send" onclick="send()">send</button>
+    <script type="module">
+
+        document.getElementById("connect").onclick = connect;
+        document.getElementById("send").onclick = send;
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+
+        async function connect() {
+            await provider.send("eth_requestAccounts", []);
+            const signer = provider.getSigner()
+            document.getElementById("address").value = await signer.getAddress();
+        }
+        // ETH
+        async function send() {
+            const signer = provider.getSigner()
+            const tx = {
+                to: document.getElementById("address").value,
+                value: ethers.utils.parseEther("0.001701")
+            };
+
+            signer.sendTransaction(tx).then(function (tx) {
+                console.log("Transaction hash: " + tx.hash);
+            }).catch(function (error) {
+                console.error(error);
+            });
+        }
+    </script>
+</body>
+
+</html>
